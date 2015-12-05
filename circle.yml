@@ -1,6 +1,6 @@
 machine:
     java:
-        version: openjdk8
+        version: openjdk7
     environment:
         ANDROID_HOME: /home/ubuntu/android
         JAVA_OPTS: "-Xmx2048m -XX:MaxPermSize=1024m"
