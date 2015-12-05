@@ -1,0 +1,30 @@
+machine:
+    java:
+        version: openjdk7
+    environment:
+        ANDROID_HOME: /home/ubuntu/android
+        JAVA_OPTS: "-Xmx2048m -XX:MaxPermSize=1024m"
+
+dependencies:
+    cache_directories:
+        - ~/.android
+        - ~/android
+    override:
+        - ./install-dependencies.sh
+
+test:
+    pre:
+        - $ANDROID_HOME/tools/emulator -avd test-target -no-skin -no-audio -no-window -no-boot-anim:
+            background: true
+            parallel: true
+        - ./wait.sh:
+            parallel: true
+    override:
+        - ./gradlew connectedAndroidTestDebug -PdisablePreDex
+
+deployment:
+    production:
+        branch: master
+        commands:
+            - ./gradlew assemble
+            - ./gradlew crashlyticsUploadDistributionDebug crashlyticsUploadDistributionRelease
